@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Recipe</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="navbar d-flex ms-3 p-2">
+        <!-- This will display the Edit Recipe -->
+        <h1 style="margin-right: 35%">Edit Recipe</h1>
+        <!-- These buttons will take the user to the app.route in the href  -->
+        <p><a href="/dashboard">Dashboard</a></p>
+        <p><a href="/logout">Logout</a></p>
+    </div>
+    <!-- This is where we flash messages for failing validation -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <!-- container div to hold 2 different columns -->
+    <div class="main">
+        <!-- left column div -->
+        <form action="/send_edit/{{ recipe['id'] }}" method="post" class="form-group ms-4 mt-4 d-flex gap-5 justify-content-center">
+            <div class="leftcol">               
+                <label for="name" class="label-group mb-3">Name: </label>
+                <input type="text" name="name" id="name" class="form-control" placeholder="{{ recipe['name'] }}"> <br>
+
+                <label for="description" class="label-group mb-3">Description: </label>
+                <textarea name="description" id="description" cols="15" rows="5" class="form-control mb-3">{{ recipe['description'] }}</textarea>
+
+                <label for="instructions" class="label-group mb-3">Instructions: </label>
+                <textarea name="instructions" id="instructions" cols="15" rows="5" class="form-control mb-3">{{ recipe['instructions'] }}</textarea>
+                <button type="submit" class="btn btn-success mt-3">Update</button>
+            </div>
+            <div class="rightcol">
+                <label for="date_made" class="label-group mb-3">Date Made On: </label> <br>
+                <input type="date" name="date_made" id="date_made" class="mb-3" value="{{ recipe['date_made'] }}"> <br>
+                <!-- when using radio buttons, we set the key (name) to the same, and different values for the buttons -->
+                <label for="under_30_radio" class="label-group">Under 30 Minutes?</label> <br>
+                <!-- this if statement presets whatever button was selected upon initial creation -->
+                {% if recipe['under_30'] == 'yes' %}
+                <input type="radio" name="under_30" value="yes" checked id="yes"> Yes
+                <input type="radio" name="under_30" value="no" id="no"> No <br>
+                {% endif %}
+                {% if recipe['under_30'] != 'yes' %}
+                <input type="radio" name="under_30" value="yes" id="yes"> Yes
+                <input type="radio" name="under_30" value="no" checked id="no"> No <br>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

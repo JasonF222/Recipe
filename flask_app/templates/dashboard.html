@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="navbar d-flex">
+        <!-- This will display the first name of our user -->
+        <h1>Welcome {{user['first_name']}}</h1>
+        <!-- These buttons will take the user to the app.route in the href  -->
+        <p><a href="/create_recipe">Create</a></p>
+        <p><a href="/logout">Logout</a></p>
+    </div>
+
+    <div class="table">
+        <!-- header above table -->
+        <h3>These are the recipes</h3>
+        <table class="table table-borderless">
+            <thead>
+                <!-- creates new row in table -->
+                <tr>
+                    <!-- new header in table -->
+                    <th>Name</th>
+                    <th>Under 30 Minutes?</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <!-- Jinja2 loop through data to create a row with all the data from our db -->
+                {% for recipe in recipes: %}
+                <tr>
+                    <td>{{ recipe.name }}</td>
+                    <td>{{ recipe.under_30 }}</td>
+                        <!-- this is where we add our action buttons -->
+                    <td>
+                        <a href="/show_recipe/{{ recipe.id }}">view instructions</a> |
+                        <!-- this is to check if current user is recipe author -->
+                        {% if recipe.user_id == user['id']: %}
+                        <!-- if current user is author, below links will populate -->
+                            <a href="/edit_recipe/{{ recipe.id }}">edit</a> |
+                            <a href="/delete_recipe/{{ recipe.id }}">delete</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                <!-- double check that you have all of your for and if loops closed! -->
+        </table>
+    </div>
+</body>
+
+</html>
